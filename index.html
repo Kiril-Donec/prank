@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анимированная страница</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            cursor: none;
+            perspective: 1000px;
+        }
+        
+        .cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #f00;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            box-shadow: 0 0 20px #f00, 0 0 40px #f00, 0 0 60px #f00;
+            mix-blend-mode: difference;
+        }
+        
+        .section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+        
+        .text-container {
+            position: relative;
+            font-size: 6vw;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            transform-style: preserve-3d;
+            letter-spacing: 5px;
+            animation: glitch 2s infinite;
+        }
+        
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+                text-shadow: 0 0 0 #0ff;
+            }
+            2% {
+                transform: translate(-3px, 2px);
+                text-shadow: 2px 0 2px #f0f, -2px 0 2px #0ff;
+            }
+            4% {
+                transform: translate(3px, -2px);
+                text-shadow: -2px 0 2px #f0f, 2px 0 2px #0ff;
+            }
+            6% {
+                transform: translate(0);
+                text-shadow: none;
+            }
+            100% {
+                transform: translate(0);
+                text-shadow: none;
+            }
+        }
+        
+        .squares {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            transform-style: preserve-3d;
+        }
+        
+        .square {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: rotate 20s infinite linear;
+            transform-style: preserve-3d;
+        }
+        
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg) translateZ(0px);
+            }
+            100% {
+                transform: rotate(360deg) translateZ(100px);
+            }
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #f00;
+            animation: pulse 2s infinite;
+            text-transform: uppercase;
+            z-index: 100;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                color: #f00;
+            }
+            50% {
+                transform: scale(1.1);
+                color: #ff0;
+            }
+            100% {
+                transform: scale(1);
+                color: #f00;
+            }
+        }
+        
+        .parallax {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+        
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+        
+        .parallax-element {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 5rem;
+            font-weight: bold;
+            filter: blur(2px);
+        }
+        
+        #scroll-indicator {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .dot.active {
+            background-color: #f00;
+            transform: scale(1.5);
+            box-shadow: 0 0 10px #f00;
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    
+    <div id="scroll-indicator">
+        <div class="dot active" data-index="0"></div>
+        <div class="dot" data-index="1"></div>
+        <div class="dot" data-index="2"></div>
+        <div class="dot" data-index="3"></div>
+    </div>
+    
+    <div class="section" id="section1">
+        <div class="text-container">КЛИКНИ ЗДЕСЬ</div>
+        <div class="squares"></div>
+        <div class="parallax">
+            <div class="parallax-layer" data-speed="0.2"></div>
+            <div class="parallax-layer" data-speed="0.5"></div>
+            <div class="parallax-layer" data-speed="0.8"></div>
+        </div>
+    </div>
+    
+    <div class="section" id="section2">
+        <div class="text-container">СКРОЛЛ ДАЛЬШЕ</div>
+        <div class="squares"></div>
+        <div class="parallax">
+            <div class="parallax-layer" data-speed="0.2"></div>
+            <div class="parallax-layer" data-speed="0.5"></div>
+            <div class="parallax-layer" data-speed="0.8"></div>
+        </div>
+    </div>
+    
+    <div class="section" id="section3">
+        <div class="text-container">ЕЩИ НИЖЕ</div>
+        <div class="squares"></div>
+        <div class="parallax">
+            <div class="parallax-layer" data-speed="0.2"></div>
+            <div class="parallax-layer" data-speed="0.5"></div>
+            <div class="parallax-layer" data-speed="0.8"></div>
+        </div>
+    </div>
+    
+    <div class="section" id="section4">
+        <div class="text-container">СЮРПРИЗ!</div>
+        <div class="squares"></div>
+        <div class="parallax">
+            <div class="parallax-layer" data-speed="0.2"></div>
+            <div class="parallax-layer" data-speed="0.5"></div>
+            <div class="parallax-layer" data-speed="0.8"></div>
+        </div>
+    </div>
+    
+    <div class="footer">ВЕРМАКС СИГМА ВСЕ ЕБЛАНІ</div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    
+    <script>
+        // Настройка кастомного курсора
+        const cursor = document.querySelector('.cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        
+        document.addEventListener('click', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            setTimeout(() => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 100);
+        });
+        
+        // Создание квадратов для фона
+        const createSquares = () => {
+            const squaresContainers = document.querySelectorAll('.squares');
+            
+            squaresContainers.forEach(container => {
+                for (let i = 0; i < 20; i++) {
+                    const square = document.createElement('div');
+                    square.classList.add('square');
+                    
+                    const size = Math.random() * 100 + 50;
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    const z = Math.random() * 500 - 250;
+                    const rotX = Math.random() * 360;
+                    const rotY = Math.random() * 360;
+                    const rotZ = Math.random() * 360;
+                    const delay = Math.random() * 5;
+                    
+                    square.style.width = size + 'px';
+                    square.style.height = size + 'px';
+                    square.style.left = x + '%';
+                    square.style.top = y + '%';
+                    square.style.transform = `translateZ(${z}px) rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;
+                    square.style.animationDelay = delay + 's';
+                    
+                    container.appendChild(square);
+                }
+            });
+        };
+        
+        // Создание элементов параллакс эффекта
+        const createParallaxElements = () => {
+            const parallaxLayers = document.querySelectorAll('.parallax-layer');
+            
+            parallaxLayers.forEach(layer => {
+                const speed = layer.getAttribute('data-speed');
+                
+                for (let i = 0; i < 10; i++) {
+                    const element = document.createElement('div');
+                    element.classList.add('parallax-element');
+                    
+                    element.textContent = ['404', 'ERROR', 'HACK', 'SYSTEM', 'FAIL'][Math.floor(Math.random() * 5)];
+                    
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    const z = Math.random() * 500 - 250;
+                    
+                    element.style.left = x + '%';
+                    element.style.top = y + '%';
+                    element.style.transform = `translateZ(${z}px)`;
+                    
+                    layer.appendChild(element);
+                }
+            });
+        };
+        
+        // Настройка эффекта прокрутки
+        const setupScrollEffects = () => {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Настройка snap scroll для секций
+            gsap.utils.toArray('.section').forEach((section, index) => {
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: 'top top',
+                    end: 'bottom top',
+                    onEnter: () => updateActiveSection(index),
+                    onEnterBack: () => updateActiveSection(index)
+                });
+            });
+            
+            // Параллакс эффект при скролле
+            document.addEventListener('scroll', () => {
+                const scroll = window.scrollY;
+                
+                document.querySelectorAll('.parallax-layer').forEach(layer => {
+                    const speed = layer.getAttribute('data-speed');
+                    layer.style.transform = `translateY(${scroll * speed}px)`;
+                });
+            });
+        };
+        
+        // Обновление активной секции для индикатора
+        const updateActiveSection = (index) => {
+            document.querySelectorAll('.dot').forEach(dot => {
+                dot.classList.remove('active');
+            });
+            
+            document.querySelector(`.dot[data-index="${index}"]`).classList.add('active');
+        };
+        
+        // Обработка клика на индикатор
+        document.querySelectorAll('.dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                const index = dot.getAttribute('data-index');
+                const section = document.getElementById(`section${parseInt(index) + 1}`);
+                
+                window.scrollTo({
+                    top: section.offsetTop,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Анимация текста при наведении
+        document.querySelectorAll('.text-container').forEach(container => {
+            container.addEventListener('mouseover', () => {
+                container.style.animation = 'none';
+                container.style.textShadow = '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff';
+                
+                setTimeout(() => {
+                    container.style.animation = 'glitch 2s infinite';
+                    container.style.textShadow = 'none';
+                }, 500);
+            });
+        });
+        
+        // Пранк эффект при клике на последнюю секцию
+        document.getElementById('section4').addEventListener('click', () => {
+            const pranks = [
+                () => {
+                    // Вращение страницы
+                    document.body.style.transition = 'transform 1s ease-in-out';
+                    document.body.style.transform = 'rotate(180deg)';
+                    setTimeout(() => {
+                        document.body.style.transform = 'rotate(0deg)';
+                    }, 1000);
+                },
+                () => {
+                    // Быстрое мигание цветов
+                    let count = 0;
+                    const interval = setInterval(() => {
+                        document.body.style.backgroundColor = count % 2 === 0 ? '#fff' : '#000';
+                        count++;
+                        if (count > 10) {
+                            clearInterval(interval);
+                            document.body.style.backgroundColor = '#000';
+                        }
+                    }, 100);
+                },
+                () => {
+                    // Размытие страницы
+                    document.body.style.transition = 'filter 0.5s ease-in-out';
+                    document.body.style.filter = 'blur(20px)';
+                    setTimeout(() => {
+                        document.body.style.filter = 'blur(0)';
+                    }, 1000);
+                },
+                () => {
+                    // Трясущийся экран
+                    document.body.style.animation = 'shake 0.5s infinite';
+                    
+                    document.body.style.setProperty('--shake-offset', '10px');
+                    
+                    setTimeout(() => {
+                        document.body.style.animation = 'none';
+                    }, 1000);
+                    
+                    // Добавление анимации shake, если ее еще нет
+                    if (!document.querySelector('style#shake-animation')) {
+                        const style = document.createElement('style');
+                        style.id = 'shake-animation';
+                        style.textContent = `
+                            @keyframes shake {
+                                0% { transform: translate(0); }
+                                20% { transform: translate(var(--shake-offset), var(--shake-offset)); }
+                                40% { transform: translate(calc(var(--shake-offset) * -1), var(--shake-offset)); }
+                                60% { transform: translate(var(--shake-offset), calc(var(--shake-offset) * -1)); }
+                                80% { transform: translate(calc(var(--shake-offset) * -1), calc(var(--shake-offset) * -1)); }
+                                100% { transform: translate(0); }
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }
+                }
+            ];
+            
+            // Выбор случайного эффекта
+            const randomEffect = pranks[Math.floor(Math.random() * pranks.length)];
+            randomEffect();
+        });
+        
+        // Инициализация
+        window.addEventListener('load', () => {
+            createSquares();
+            createParallaxElements();
+            setupScrollEffects();
+        });
+    </script>
+</body>
+</html>
